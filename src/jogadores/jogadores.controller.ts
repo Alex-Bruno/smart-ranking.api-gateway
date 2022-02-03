@@ -57,9 +57,8 @@ export class JogadoresController {
     }
 
     @Delete('/:id')
-    @UsePipes(ValidationPipe)
     async deletarJogador(
-        @Query('_id', ValidacaoParametrosPipe) _id: string
+        @Param('_id', ValidacaoParametrosPipe) _id: string
     ) {
         await this.clientAdminBackend.emit('deletar-jogador', { _id });
     }
