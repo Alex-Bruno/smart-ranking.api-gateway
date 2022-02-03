@@ -56,7 +56,7 @@ export class JogadoresController {
             throw new BadRequestException(`Categoria ${atualizarJogadorDto.categoria} não cadastrada!`)
     }
 
-    @Delete('/:id')
+    @Delete('/:_id')
     async deletarJogador(
         @Param('_id', ValidacaoParametrosPipe) _id: string
     ) {
