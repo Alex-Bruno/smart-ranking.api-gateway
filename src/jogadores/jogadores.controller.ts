@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Logger, Param, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { lastValueFrom, Observable } from 'rxjs';
 import { ValidacaoParametrosPipe } from 'src/commom/pipes/validacao-parametros.pipe';
 import { ClientProxySmartRanking } from 'src/proxyrmq/client-proxy';
@@ -56,6 +56,8 @@ export class JogadoresController {
             throw new BadRequestException(`Categoria ${atualizarJogadorDto.categoria} não cadastrada!`)
     }
 
+    @Delete('/:id')
+    @UsePipes(ValidationPipe)
     async deletarJogador(
         @Param('_id', ValidacaoParametrosPipe) _id: string
     ) {
