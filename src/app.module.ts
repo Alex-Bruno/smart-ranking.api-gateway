@@ -3,15 +3,19 @@ import { ConfigModule } from '@nestjs/config';
 import { CategoriasModule } from './categorias/categorias.module';
 import { JogadoresModule } from './jogadores/jogadores.module';
 import { ProxyrmqModule } from './proxyrmq/proxyrmq.module';
+import { AwsModule } from './aws/aws.module';
+import { DesafiosModule } from './desafios/desafios.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     CategoriasModule,
     JogadoresModule,
-    ProxyrmqModule, 
+    ProxyrmqModule,
+    AwsModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    DesafiosModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

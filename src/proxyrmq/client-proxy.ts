@@ -1,18 +1,38 @@
 // Provider centralizador do ClientProxy
 import { Injectable } from "@nestjs/common";
 import { ClientProxy, ClientProxyFactory, Transport } from "@nestjs/microservices";
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ClientProxySmartRanking {
+
+    constructor(
+        private configService: ConfigService
+    ) {}
+    
     getClientProxyAdminBackendInstance(): ClientProxy {
 
         return ClientProxyFactory.create({
             transport: Transport.RMQ,
             options: {
-                urls: ['amqp://user:PROBk3xcaH0b@54.144.175.54:5672/smartranking'],
+                urls: [`amqp://${this.configService.get<string>('RABBITMQ_USER')}:${this.configService.get<string>('RABBITMQ_PASSWORD')}@${this.configService.get<string>('RABBITMQ_URL')}`],
                 queue: 'admin-backend'
             },
         });
 
     }
+
+
+    getClientProxyDesafiosInstance(): ClientProxy {
+ 
+         return ClientProxyFactory.create({
+             transport: Transport.RMQ,
+             options: {
+                urls: [`amqp://${this.configService.get<string>('RABBITMQ_USER')}:${this.configService.get<string>('RABBITMQ_PASSWORD')}@${this.configService.get<string>('RABBITMQ_URL')}`],
+                 queue: 'desafios'
+             },
+         });
+ 
+     }
+     
 }
