@@ -37,7 +37,6 @@ $ npm run test:cov
 ## Dependences
 npm install @nestjs/microservices
 npm install amqplib amqp-connection-manager
-npm install moment-timezone
 npm install class-validator class-transformer
 npm install @nestjs/config  
 npm install aws-sdk  
