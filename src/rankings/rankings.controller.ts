@@ -22,7 +22,7 @@ export class RankingsController {
         if (!idCategoria)
             throw new BadRequestException(`O id da categoria é obrigatório`);
 
-        return this.clientRankingsBackend.send('consultar-rankings', { idCategoria: idCategoria, dataRef: dataRef ? dataRef : '' });
+        return this.clientRankingsBackend.send('consultar-rankings', { idCategoria: idCategoria, dataRef: (dataRef) ? dataRef : '' });
 
     }
 
