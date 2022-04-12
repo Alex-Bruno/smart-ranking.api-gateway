@@ -1,5 +1,5 @@
 import { AtualizarJogadorDto } from './dtos/atualizar-jogador.dto';
-import { lastValue, Observable, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
 import { AwsService } from './../aws/aws.service';
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
