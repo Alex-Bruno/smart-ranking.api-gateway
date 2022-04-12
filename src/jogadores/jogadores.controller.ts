@@ -1,3 +1,4 @@
+import { JogadoresService } from './jogadores.service';
 import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -13,57 +14,38 @@ export class JogadoresController {
     private logger = new Logger(JogadoresController.name);
 
     constructor(
-        private clientProxySmartRanking: ClientProxySmartRanking,
-        private awsService: AwsService
+        private jogadoresService: JogadoresService,
     ) { }
-
-    private clientAdminBackend = this.clientProxySmartRanking.getClientProxyAdminBackendInstance();
 
     @Post()
     @UsePipes(ValidationPipe)
     async criarJogador(
         @Body() criarJogadorDto: CriarJogadorDto
     ) {
-        this.logger.log(`criarJogadorDto: ${JSON.stringify(criarJogadorDto)}`);
-
-        const categoria = await lastValueFrom(this.clientAdminBackend.send('consultar-categorias', criarJogadorDto.categoria));
-
-        if (categoria) {
-            await this.clientAdminBackend.emit('criar-jogador', criarJogadorDto);
-        } else
-            throw new BadRequestException(`Categoria ${criarJogadorDto.categoria} não cadastrada!`)
+        await this.jogadoresService.criarJogador(criarJogadorDto);
     }
 
     @Get()
-    consultarJogadores(
+    async consultarJogadores(
         @Query('idJogador') _id: string
-    ): Observable<any> {
-        return this.clientAdminBackend.send('consultar-jogadores', (_id) ? _id : '');
+    ): Promise<any> {
+        return await this.jogadoresService.consultarJogadores(_id);
     }
 
     @Put('/:_id')
     @UsePipes(ValidationPipe)
-    async atualizarCategoria(
+    async atualizarJogador(
         @Body() atualizarJogadorDto: AtualizarJogadorDto,
         @Param('_id') _id: string
     ) {
-        this.logger.log(`atualizarJogadorDto: ${JSON.stringify(atualizarJogadorDto)}`);
-
-        const categoria = await lastValueFrom(this.clientAdminBackend.send('consultar-categorias', atualizarJogadorDto.categoria));
-
-        if (!atualizarJogadorDto.categoria || categoria) {
-            await this.clientAdminBackend.emit('atualizar-jogador', {
-                id: _id, jogador: atualizarJogadorDto
-            });
-        } else
-            throw new BadRequestException(`Categoria ${atualizarJogadorDto.categoria} não cadastrada!`)
+       await this.jogadoresService.atualizarJogador(atualizarJogadorDto, _id);
     }
 
     @Delete('/:_id')
-    async deletarJogador(
+    deletarJogador(
         @Param('_id', ValidacaoParametrosPipe) _id: string
     ) {
-        await this.clientAdminBackend.emit('deletar-jogador', { _id });
+        this.jogadoresService.deletarJogador(_id);
     }
 
     @Post('/:_id/upload')
@@ -71,24 +53,7 @@ export class JogadoresController {
     async uploadArquivo(
         @UploadedFile() file,
         @Param('_id') _id: string
-    ) {
-        //this.logger.log(file);
-
-        const jogador = await lastValueFrom(this.clientAdminBackend.send('consultar-jogadores', _id));
-
-        if (!jogador)
-            throw new BadRequestException(`Jogador ${_id} não encontrado!`);
-
-        const urlFotoJogador = await this.awsService.uploadArquivo(file, _id);
-
-        const atualizarJogadorDto: AtualizarJogadorDto = {};
-        atualizarJogadorDto.urlFotoJogador = urlFotoJogador.url;
-
-        await this.clientAdminBackend.emit('atualizar-jogador', {
-            id: _id,
-            jogador: atualizarJogadorDto
-        });
-
-        return await lastValueFrom(this.clientAdminBackend.send('consultar-jogadores', _id));;
+    ): Promise<any> {
+        return await this.jogadoresService.uploadArquivo(file, _id);
     }
 }
