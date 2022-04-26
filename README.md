@@ -40,6 +40,7 @@ npm install amqplib amqp-connection-manager
 npm install class-validator class-transformer
 npm install @nestjs/config  
 npm install aws-sdk  
+npm install amazon-cognito-identity-js
 
 ## Stay in touch
 

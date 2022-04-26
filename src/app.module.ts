@@ -6,6 +6,7 @@ import { ProxyrmqModule } from './proxyrmq/proxyrmq.module';
 import { AwsModule } from './aws/aws.module';
 import { DesafiosModule } from './desafios/desafios.module';
 import { RankingsModule } from './rankings/rankings.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RankingsModule } from './rankings/rankings.module';
     ConfigModule.forRoot({ isGlobal: true }),
     DesafiosModule,
     RankingsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
