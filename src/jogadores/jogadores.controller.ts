@@ -16,6 +16,7 @@ export class JogadoresController {
         private jogadoresService: JogadoresService,
     ) { }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     @UsePipes(ValidationPipe)
     async criarJogador(
