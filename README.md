@@ -1,6 +1,6 @@
 ## Description
 
-Construa um Backend resiliente e escalável com NestJS, RabbitMQ, serviços em cloud[AWS e SAP] e padrões arquiteturais corporativos.
+Construa um Backend resiliente e escalável com NestJS, serviços em cloud[AWS e SAP] e padrões arquiteturais corporativos.
 
 ## Scopo
 
