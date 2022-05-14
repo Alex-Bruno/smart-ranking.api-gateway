@@ -41,6 +41,10 @@ npm install class-validator class-transformer
 npm install @nestjs/config  
 npm install aws-sdk  
 npm install amazon-cognito-identity-js
+npm install @nestjs/passport passport 
+npm install passport-jwt
+npm install --dev @types/passport-jwt
+npm install jwks-rsa
 
 ## Stay in touch
 

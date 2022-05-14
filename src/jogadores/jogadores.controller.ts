@@ -1,12 +1,11 @@
 import { JogadoresService } from './jogadores.service';
-import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { lastValueFrom, Observable } from 'rxjs';
-import { AwsService } from 'src/aws/aws.service';
 import { ValidacaoParametrosPipe } from 'src/commom/pipes/validacao-parametros.pipe';
-import { ClientProxySmartRanking } from 'src/proxyrmq/client-proxy';
 import { AtualizarJogadorDto } from './dtos/atualizar-jogador.dto';
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('api/v1/jogadores')
 export class JogadoresController {
@@ -25,10 +24,14 @@ export class JogadoresController {
         await this.jogadoresService.criarJogador(criarJogadorDto);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async consultarJogadores(
-        @Query('idJogador') _id: string
+        @Query('idJogador') _id: string,
+        @Req() req: Request
     ): Promise<any> {
+        this.logger.log(`req: ${JSON.stringify(req.user)}`);
+        
         return await this.jogadoresService.consultarJogadores(_id);
     }
 

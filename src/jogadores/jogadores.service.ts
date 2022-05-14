@@ -1,7 +1,7 @@
 import { AtualizarJogadorDto } from './dtos/atualizar-jogador.dto';
 import { lastValueFrom } from 'rxjs';
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
-import { AwsService } from './../aws/aws.service';
+import { AwsS3Service } from '../aws/aws-s3.service';
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { ClientProxySmartRanking } from 'src/proxyrmq/client-proxy';
 
@@ -10,7 +10,7 @@ export class JogadoresService {
 
     constructor(
         private clientProxySmartRanking: ClientProxySmartRanking,
-        private awsService: AwsService
+        private awsS3Service: AwsS3Service
     ) { }
 
     private logger = new Logger(JogadoresService.name);
@@ -57,7 +57,7 @@ export class JogadoresService {
         if (!jogador)
             throw new BadRequestException(`Jogador ${_id} não encontrado!`);
 
-        const urlFotoJogador = await this.awsService.uploadArquivo(file, _id);
+        const urlFotoJogador = await this.awsS3Service.uploadArquivo(file, _id);
 
         const atualizarJogadorDto: AtualizarJogadorDto = {};
         atualizarJogadorDto.urlFotoJogador = urlFotoJogador.url;
